@@ -2,7 +2,6 @@ package com.sarakhman.datastructures.queue;
 
 public class ArrayQueue implements Queue{
     private int size;
-    private int index;
     private Object[] array;
 
     public ArrayQueue() {
@@ -31,9 +30,10 @@ public class ArrayQueue implements Queue{
         if(isEmpty()){
             throw new IllegalStateException("Queue is empty!");
         }
-        Object result = array[index];
-        array[index]=null;
-        index++;
+        Object result = array[0];
+        for (int i = 1; i < size; i++) {
+            array[i-1]=array[i];
+        }
         size--;
         return result;
 
@@ -41,7 +41,7 @@ public class ArrayQueue implements Queue{
 
     @Override
     public Object peek() {
-        return array[index];
+        return array[0];
     }
 
     @Override
@@ -71,7 +71,6 @@ public class ArrayQueue implements Queue{
     @Override
     public void clear() {
         size = 0;
-        index = 0;
     }
 
     @Override

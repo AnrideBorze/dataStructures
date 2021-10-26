@@ -36,7 +36,26 @@ public class TestArrayQueue {
         assertEquals(2,arrayQueue.size());
     }
 
+    @Test
+    public void testEnqueueAndDequeueWorkCorrectly(){
+        ArrayQueue arrayQueue = new ArrayQueue();
 
+        arrayQueue.enqueue("A");
+        arrayQueue.enqueue("B");
+        arrayQueue.enqueue("C");
+        arrayQueue.enqueue("D");
+        arrayQueue.enqueue("E");
+        assertEquals("A",arrayQueue.dequeue());
+        assertEquals("B",arrayQueue.dequeue());
+        arrayQueue.enqueue("A");
+        arrayQueue.enqueue("B");
+        assertEquals("C",arrayQueue.dequeue());
+        assertEquals("D",arrayQueue.dequeue());
+        assertEquals("E",arrayQueue.dequeue());
+        assertEquals("A",arrayQueue.dequeue());
+        assertEquals("B",arrayQueue.dequeue());
+        assertEquals(0,arrayQueue.size());
+    }
 
     @Test
     public void testEnqueueAndDequeueAndSizeWorkCorrectly(){
