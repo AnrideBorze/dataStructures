@@ -101,7 +101,7 @@ public class TestArrayQueue {
     @Test
     public void testContainsReturnFalseOnEmptyQueue(){
         ArrayQueue arrayQueue = new ArrayQueue();
-        assertTrue(arrayQueue.contains(new String("A")));
+        assertFalse(arrayQueue.contains(new String("A")));
     }
 
     @Test
@@ -152,7 +152,6 @@ public class TestArrayQueue {
         ArrayQueue arrayQueue = new ArrayQueue();
 
         arrayQueue.enqueue("A");
-        arrayQueue.clear();
         assertFalse(arrayQueue.isEmpty());
     }
     @Test
