@@ -28,6 +28,9 @@ public class ArrayQueue implements Queue{
 
     @Override
     public Object dequeue() {
+        if(isEmpty()){
+            throw new IllegalStateException("Queue is empty!");
+        }
         Object result = array[index];
         array[index]=null;
         index++;
@@ -73,7 +76,17 @@ public class ArrayQueue implements Queue{
 
     @Override
     public String toString() {
-
-        return super.toString();
+        String result = "";
+        for (int i = 0; i < size; i++) {
+            result += array[i];
+            if(i==size-1){
+                break;
+            }
+            else {
+                result +=", ";
+            }
+        }
+        result = "[" + result + "]";
+        return result;
     }
 }

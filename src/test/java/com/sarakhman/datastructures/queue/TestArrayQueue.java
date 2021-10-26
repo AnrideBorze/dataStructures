@@ -2,6 +2,7 @@ package com.sarakhman.datastructures.queue;
 
 
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -170,5 +171,13 @@ public class TestArrayQueue {
         arrayQueue.enqueue("A");
         assertEquals("A",arrayQueue.peek());
         assertFalse(arrayQueue.isEmpty());
+    }
+
+    @Test
+    public void testThrowIllegalStateExceptionWhenPopOnEmptyStack() {
+        ArrayQueue arrayQueue = new ArrayQueue();
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+            arrayQueue.dequeue();
+        });
     }
 }
