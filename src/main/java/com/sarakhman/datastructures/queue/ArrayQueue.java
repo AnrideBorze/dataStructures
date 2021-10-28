@@ -14,6 +14,9 @@ public class ArrayQueue implements Queue{
 
     @Override
     public void enqueue(Object value) {
+        if(value==null){
+            throw new NullPointerException("You canont add null element");
+        }
         if(size == array.length){
             Object[] newArray = new Object[array.length*2];
             for (int i = 0; i < array.length; i++) {
@@ -61,9 +64,12 @@ public class ArrayQueue implements Queue{
 
     @Override
     public boolean contains(Object value) {
+        if(value==null){
+            throw new NullPointerException("You cannot look for null element");
+        }
         for (int i = 0; i < size; i++) {
             Object valueInQueue = array[i];
-            if(value.equals(valueInQueue));
+            if(value.equals(valueInQueue))
             return true;
         }
         return false;

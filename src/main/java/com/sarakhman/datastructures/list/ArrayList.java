@@ -11,6 +11,9 @@ public class ArrayList implements List{
 
     @Override
     public void add(Object value) {
+        if(value==null){
+            throw new NullPointerException("You cannot add null element");
+        }
         if(size == array.length){
             Object[] newArray = new Object[(int)(array.length*1.5)];
             for (int i = 0; i < array.length; i++) {
@@ -24,6 +27,9 @@ public class ArrayList implements List{
 
     @Override
     public void add(Object value, int index) {
+        if(value==null){
+            throw new NullPointerException("You cannot add null element");
+        }
         if(index>size){
             throw new IndexOutOfBoundsException("You cannot add element by that index");
         }
@@ -73,6 +79,9 @@ public class ArrayList implements List{
 
     @Override
     public Object set(Object value, int index) {
+        if(value==null){
+            throw new NullPointerException("You cannot set element on null");
+        }
         if(index>=size){
             throw new IndexOutOfBoundsException("There is no element in that index");
         }
@@ -110,6 +119,9 @@ public class ArrayList implements List{
 
     @Override
     public int indexOf(Object value) {
+        if(value==null){
+            throw new NullPointerException("You cannot look for null element");
+        }
         for (int i = 0; i < size; i++) {
             if(value.equals(array[i])){
                 return i;
@@ -120,6 +132,9 @@ public class ArrayList implements List{
 
     @Override
     public int lastIndexOf(Object value) {
+        if(value==null){
+            throw new NullPointerException("You cannot look for null element");
+        }
         for (int i = size; i >= 0; i--) {
             if(value.equals(array[i])){
                 return i;
