@@ -31,9 +31,10 @@ public class ArrayQueue implements Queue{
             throw new IllegalStateException("Queue is empty!");
         }
         Object result = array[0];
-        for (int i = 1; i < size; i++) {
-            array[i-1]=array[i];
+        for (int i = 0; i < size-1; i++) {
+            array[i]=array[i+1];
         }
+        array[size] = null;
         size--;
         return result;
 
@@ -41,6 +42,9 @@ public class ArrayQueue implements Queue{
 
     @Override
     public Object peek() {
+        if(isEmpty()){
+            throw new IllegalStateException("Queue is empty!");
+        }
         return array[0];
     }
 
@@ -51,10 +55,7 @@ public class ArrayQueue implements Queue{
 
     @Override
     public boolean isEmpty() {
-        if(size == 0){
-        return true;
-        }
-        return false;
+        return size == 0;
 
     }
 
@@ -70,22 +71,22 @@ public class ArrayQueue implements Queue{
 
     @Override
     public void clear() {
+        array = new Object[10];
         size = 0;
     }
 
     @Override
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; i++) {
-            result += array[i];
+            result.append(array[i].toString());
             if(i==size-1){
                 break;
             }
             else {
-                result +=", ";
+                result.append(", ");
             }
         }
-        result = "[" + result + "]";
-        return result;
+        return  "[" + result + "]";
     }
 }
