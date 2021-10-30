@@ -11,18 +11,7 @@ public class ArrayList implements List{
 
     @Override
     public void add(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot add null element");
-        }
-        if(size == array.length){
-            Object[] newArray = new Object[(int)(array.length*1.5)];
-            for (int i = 0; i < array.length; i++) {
-                newArray[i] = array[i];
-            }
-            array=newArray;
-        }
-        array[size] = value;
-        size++;
+       add(value, size);
     }
 
     @Override
@@ -32,6 +21,9 @@ public class ArrayList implements List{
         }
         if(index>size){
             throw new IndexOutOfBoundsException("You cannot add element by that index");
+        }
+        if(index<0){
+            throw new IndexOutOfBoundsException("You cannot add element by negative index!");
         }
         else if(size == array.length){
             Object[] newArray = new Object[(int)(array.length*1.5)];
@@ -58,6 +50,9 @@ public class ArrayList implements List{
         if(index>=size){
             throw new IndexOutOfBoundsException("There is no element in that index");
         }
+        if(index<0){
+            throw new IndexOutOfBoundsException("You cannot remove element by negative index!");
+        }
         Object result = array[index];
         for(int i =0; i<index;i++){
             array[i] = array[i];
@@ -74,6 +69,9 @@ public class ArrayList implements List{
         if(index>=size){
             throw new IndexOutOfBoundsException("There is no element in that index");
         }
+        if(index<0){
+            throw new IndexOutOfBoundsException("You cannot get element by negative index!");
+        }
         return array[index];
     }
 
@@ -84,6 +82,9 @@ public class ArrayList implements List{
         }
         if(index>=size){
             throw new IndexOutOfBoundsException("There is no element in that index");
+        }
+        if(index<0){
+            throw new IndexOutOfBoundsException("You set element by negative index!");
         }
         Object result = array[index];
         array[index] = value;
