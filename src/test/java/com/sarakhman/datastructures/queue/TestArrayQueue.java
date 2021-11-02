@@ -137,7 +137,7 @@ public class TestArrayQueue {
         ArrayQueue arrayQueue = new ArrayQueue();
 
         arrayQueue.enqueue("A");
-        assertTrue(arrayQueue.contains(new String("B")));
+        assertFalse(arrayQueue.contains(new String("B")));
     }
 
     @Test
