@@ -1,9 +1,12 @@
 package com.sarakhman.datastructures.queue;
 
+import com.sarakhman.datastructures.list.LinkedList;
+
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedQueue implements Queue{
+public class LinkedQueue implements Queue, Iterable {
     Node head;
     int size;
 
@@ -83,5 +86,41 @@ public class LinkedQueue implements Queue{
             current=current.next;
         }
         return result.toString();
+    }
+
+    @Override
+    public Iterator iterator() {
+
+        return new MyIterator(size);
+    }
+
+    private class MyIterator implements Iterator{
+
+        private int index;
+        private int maximalSize;
+
+        public MyIterator(int maximalSize) {
+            this.maximalSize = maximalSize;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index<maximalSize;
+        }
+
+        @Override
+        public Object next() {
+            index++;
+            return dequeue();
+        }
+    }
+
+    private  class Node {
+        Object value;
+        Node next;
+
+        public Node(Object value){
+            this.value = value;
+        }
     }
 }

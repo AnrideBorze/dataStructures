@@ -1,6 +1,8 @@
 package com.sarakhman.datastructures.list;
 
-public class ArrayList implements List{
+import java.util.Iterator;
+
+public class ArrayList implements List, Iterable{
     private int size;
     private Object[] array;
 
@@ -144,6 +146,26 @@ public class ArrayList implements List{
         return -1;
     }
 
+    @Override
+    public Iterator iterator() {
+        return new MyIterator();
+    }
+
+
+    private class MyIterator implements Iterator{
+        private int index;
+
+        @Override
+        public boolean hasNext() {
+            return index<size;
+        }
+
+        @Override
+        public Object next() {
+            index++;
+            return get(index-1);
+        }
+    }
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

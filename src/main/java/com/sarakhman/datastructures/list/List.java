@@ -1,6 +1,6 @@
 package com.sarakhman.datastructures.list;
 
-public interface List {
+public interface List extends Iterable{
     // Abstract Data Type
         // add value to the end of the list
         void add(Object value);

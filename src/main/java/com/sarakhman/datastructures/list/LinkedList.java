@@ -1,9 +1,10 @@
 package com.sarakhman.datastructures.list;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList implements List{
+public class LinkedList implements List, Iterable {
     private int size;
     private Node head;
     private Node tail;
@@ -16,14 +17,9 @@ public class LinkedList implements List{
         if(value==null){
             throw new NullPointerException("You cannot add null element");
         }
-        if(size==0){
-            Node newNode = new Node(value);
-            head = tail = newNode;
-            size++;
-        }
-        else {
+
             add(value,size);
-        }
+
     }
 
     @Override
@@ -31,11 +27,11 @@ public class LinkedList implements List{
         if(value==null){
             throw new NullPointerException("You cannot add null element");
         }
-        if(index>size){
-            throw new IndexOutOfBoundsException("You cannot add element by that index");
-        }
         if(index<0){
             throw new IndexOutOfBoundsException("You cannot add element by negative index!");
+        }
+        if(index>size){
+            throw new IndexOutOfBoundsException("You cannot add element by this index!");
         }
         Node newNode = new Node(value);
         if(size==0){
@@ -77,7 +73,7 @@ public class LinkedList implements List{
         Node result = new Node(null);
         if(size==1){
             result = head;
-            head = new Node(null);
+            head = tail = new Node(null);
         }
         else if(index==size-1){
             result = tail;
@@ -223,13 +219,13 @@ public class LinkedList implements List{
             throw new NullPointerException("You cannot look for null element");
         }
         Node current = tail;
-        int index = 0;
+        int index = size-1;
         for (int i = size; i >= 0; i--) {
             if(Objects.equals(value,current.value)){
                 return index;
             }
             current = current.prev;
-            index++;
+            index--;
         }
         return -1;
 
@@ -246,4 +242,62 @@ public class LinkedList implements List{
         result.add(current.value.toString());
         return result.toString();
     }
+
+    @Override
+    public Iterator iterator() {
+        return new MyIterator();
+    }
+
+
+    private class MyIterator implements Iterator{
+        private int index;
+
+        @Override
+        public boolean hasNext() {
+            return index<size;
+        }
+
+        @Override
+        public Object next() {
+            index++;
+            return get(index-1);
+        }
+    }
+
+
+    public class Node {
+        protected Object value;
+        protected Node next;
+        protected Node prev;
+
+
+        public Node(Object value){
+            this.value = value;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
+        }
+
+        public Node getNext() {
+            return next;
+        }
+
+        public void setNext(Node next) {
+            this.next = next;
+        }
+
+        public Node getPrev() {
+            return prev;
+        }
+
+        public void setPrev(Node prev) {
+            this.prev = prev;
+        }
+    }
 }
+

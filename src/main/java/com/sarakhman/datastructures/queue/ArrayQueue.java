@@ -1,6 +1,8 @@
 package com.sarakhman.datastructures.queue;
 
-public class ArrayQueue implements Queue{
+import java.util.Iterator;
+
+public class ArrayQueue implements Queue, Iterable{
     private int size;
     private Object[] array;
 
@@ -94,5 +96,30 @@ public class ArrayQueue implements Queue{
             }
         }
         return  "[" + result + "]";
+    }
+
+    @Override
+    public Iterator iterator() {
+        return new MyIterator(size);
+    }
+
+    private class MyIterator implements Iterator{
+        private int index;
+        private int maximalSize;
+
+        public MyIterator(int maximalSize) {
+            this.maximalSize = maximalSize;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index<maximalSize;
+        }
+
+        @Override
+        public Object next() {
+            index++;
+            return dequeue();
+        }
     }
 }
