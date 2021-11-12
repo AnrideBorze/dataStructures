@@ -4,55 +4,38 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList implements List, Iterable {
+public class LinkedList implements List{
     private int size;
     private Node head;
     private Node tail;
 
 
-
-
     @Override
     public void add(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot add null element");
-        }
-
-            add(value,size);
+        add(value, size);
 
     }
 
     @Override
     public void add(Object value, int index) {
-        if(value==null){
-            throw new NullPointerException("You cannot add null element");
-        }
-        if(index<0){
-            throw new IndexOutOfBoundsException("You cannot add element by negative index!");
-        }
-        if(index>size){
-            throw new IndexOutOfBoundsException("You cannot add element by this index!");
-        }
+        throwNullPointerException(value);
+        throwIndexOutOfBoundsExceptionForAdd(index);
+
+
         Node newNode = new Node(value);
-        if(size==0){
+        if (size == 0) {
             head = tail = newNode;
-        }
-        else if (index == 0) {
+        } else if (index == 0) {
             head.setPrev(newNode);
             newNode.setNext(head);
             head = newNode;
-        }
-        else if(index==size){
+        } else if (index == size) {
             tail.setPrev(tail);
             tail.setNext(newNode);
             newNode.setPrev(tail);
             tail = newNode;
-        }
-        else {
-            Node current = head;
-            for (int i = 0; i < index; i++) {
-                current = current.next;
-            }
+        } else {
+            Node current = fastWayToNode(index);
             newNode.setPrev(current.getPrev());
             newNode.setNext(current);
             current.prev.setNext(newNode);
@@ -64,36 +47,26 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public Object remove(int index) {
-        if (index >= size) {
-            throw new IndexOutOfBoundsException("There is no element in that index");
-        }
-        if (index < 0) {
-            throw new IndexOutOfBoundsException("You cannot remove element by negative index!");
-        }
-        Node result = new Node(null);
-        if(size==1){
+        throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
+
+        Node result;
+        if (size == 1) {
             result = head;
             head = tail = new Node(null);
-        }
-        else if(index==size-1){
+        } else if (index == size - 1) {
             result = tail;
             tail = tail.prev;
             tail.next = null;
-        }
-        else  if(index == 0){
+        } else if (index == 0) {
             result = head;
             head = head.next;
             head.prev = null;
-        }
-        else{
-            result = head;
-            for (int i = 0; i < index; i++) {
-                result = result.next;
-            }
+        } else {
+            result = fastWayToNode(index);
+
             result.next.setPrev(result.getPrev());
             result.prev.setNext(result.getNext());
         }
-
 
 
         size--;
@@ -104,55 +77,39 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public Object get(int index) {
-        if(index>=size){
-            throw new IndexOutOfBoundsException("There is no element in that index");
-        }
-        if(index<0){
-            throw new IndexOutOfBoundsException("You cannot get element by negative index!");
-        }
-        Node result = head;
-        if(index==0){
+        throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
+
+        if (index == 0) {
+            return head.value;
+        } else if (index == size - 1) {
+            return tail.value;
+        } else {
+            Node result = fastWayToNode(index);
             return result.value;
         }
-        else if(index==size-1){
-            return tail.value;
-        }
-        else{
-            for (int i = 0; i < index; i++) {
-                result = result.next;
-            }
-        }
-
-        return result.value;
 
     }
 
     @Override
     public Object set(Object value, int index) {
-        if(index>=size){
-            throw new IndexOutOfBoundsException("There is no element in that index");
-        }
-        if(index<0){
-            throw new IndexOutOfBoundsException("You cannot remove element by negative index!");
-        }
+        throwNullPointerException(value);
+        throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
+
+
         Node newNode = new Node(value);
         Node result = head;
-        if(index==0){
+        if (index == 0) {
             head.setPrev(newNode);
             newNode.setNext(head);
             head = newNode;
-        }
-        else if(index==size-1){
+        } else if (index == size - 1) {
             result = tail;
 
             tail.setNext(newNode);
             newNode.setPrev(tail);
             tail = newNode;
-        }
-        else{
-            for (int i = 0; i < index; i++) {
-                result = result.next;
-            }
+        } else {
+            result = fastWayToNode(index);
             result.prev.setNext(newNode);
             result.next.setPrev(newNode);
             newNode.setPrev(result.getPrev());
@@ -166,7 +123,7 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public void clear() {
-        head = new Node(null);
+        head = tail = null;
         size = 0;
     }
 
@@ -182,29 +139,19 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public boolean contains(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot look for null element");
-        }
-        Node current = head;
-        for (int i = 0; i < size; i++) {
-            if(Objects.equals(value,current.value)){
-                return true;
-            }
-            current = current.next;
-        }
+        throwNullPointerException(value);
 
-        return false;
+        return indexOf(value)>=0;
     }
 
     @Override
     public int indexOf(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot look for null element");
-        }
+        throwNullPointerException(value);
+
         Node current = head;
         int index = 0;
-        for (int i = 0; i < size-1; i++) {
-            if(Objects.equals(value,current.value)){
+        for (int i = 0; i < size - 1; i++) {
+            if (Objects.equals(value, current.value)) {
                 return index;
             }
             current = current.next;
@@ -215,13 +162,12 @@ public class LinkedList implements List, Iterable {
 
     @Override
     public int lastIndexOf(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot look for null element");
-        }
+        throwNullPointerException(value);
+
         Node current = tail;
-        int index = size-1;
+        int index = size - 1;
         for (int i = size; i >= 0; i--) {
-            if(Objects.equals(value,current.value)){
+            if (Objects.equals(value, current.value)) {
                 return index;
             }
             current = current.prev;
@@ -231,13 +177,54 @@ public class LinkedList implements List, Iterable {
 
     }
 
+    private Node fastWayToNode(int index) {
+        Node result;
+        if (index <= size / 2) {
+            result = head;
+            for (int i = 0; i < index; i++) {
+                result = result.next;
+            }
+        } else {
+            result = tail;
+            for (int i = size; i > index; i--) {
+                result = result.prev;
+            }
+        }
+        return result;
+    }
+
+    private void throwNullPointerException(Object value) {
+        if (value == null) {
+            throw new NullPointerException("You cannot look for null element");
+        }
+    }
+
+    private void throwIndexOutOfBoundsExceptionForRemoveGetSet(int index) {
+        if (index >= size) {
+            throw new IndexOutOfBoundsException("There is no element in that index");
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("You cannot remove element by negative index!");
+        }
+    }
+
+    private void throwIndexOutOfBoundsExceptionForAdd(int index) {
+        if (index > size) {
+            throw new IndexOutOfBoundsException("There is no element in that index");
+        }
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("You cannot remove element by negative index!");
+        }
+    }
+
+
     @Override
     public String toString() {
-        StringJoiner result = new StringJoiner(", ","[","]");
+        StringJoiner result = new StringJoiner(", ", "[", "]");
         Node current = head;
-        while (current.next != null){
+        while (current.next != null) {
             result.add(current.value.toString());
-            current=current.next;
+            current = current.next;
         }
         result.add(current.value.toString());
         return result.toString();
@@ -249,29 +236,35 @@ public class LinkedList implements List, Iterable {
     }
 
 
-    private class MyIterator implements Iterator{
-        private int index;
+    private class MyIterator implements Iterator {
+        private Node current = head;
+
 
         @Override
+        public void remove() {
+
+        }
+        @Override
         public boolean hasNext() {
-            return index<size;
+            return current != null;
         }
 
         @Override
         public Object next() {
-            index++;
-            return get(index-1);
+            Object value = current.value;
+            current = current.next;
+            return value;
         }
     }
 
 
-    public class Node {
-        protected Object value;
-        protected Node next;
-        protected Node prev;
+    private class Node {
+        private Object value;
+        private Node next;
+        private Node prev;
 
 
-        public Node(Object value){
+        public Node(Object value) {
             this.value = value;
         }
 

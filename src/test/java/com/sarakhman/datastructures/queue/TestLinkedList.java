@@ -4,8 +4,7 @@ import com.sarakhman.datastructures.list.LinkedList;
 import com.sarakhman.datastructures.list.List;
 
 
-
-public class TestLinkedList extends TestList{
+public class TestLinkedList extends TestList {
 
     @Override
     protected List getList() {

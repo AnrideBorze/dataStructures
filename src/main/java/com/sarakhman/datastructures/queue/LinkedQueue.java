@@ -12,25 +12,24 @@ public class LinkedQueue implements Queue, Iterable {
 
     @Override
     public void enqueue(Object value) {
-        if(value==null){
+        if (value == null) {
             throw new NullPointerException("You canont add null element");
         }
-        if(size==0){
+        if (size == 0) {
             head = new Node(value);
-        }
-        else{
+        } else {
             Node current = head;
-            while(current.next !=null){
+            while (current.next != null) {
                 current = current.next;
             }
-            current.next=new Node(value);
+            current.next = new Node(value);
         }
         size++;
     }
 
     @Override
     public Object dequeue() {
-        if(isEmpty()){
+        if (isEmpty()) {
             throw new IllegalStateException("Queue is empty!");
         }
         Object result = head.value;
@@ -51,18 +50,18 @@ public class LinkedQueue implements Queue, Iterable {
 
     @Override
     public boolean isEmpty() {
-        return size==0;
+        return size == 0;
     }
 
     @Override
     public boolean contains(Object value) {
-        if(value==null){
+        if (value == null) {
             throw new NullPointerException("You cannot look for null element");
         }
         Node current = head;
         for (int i = 0; i < size; i++) {
 
-            if(Objects.equals(current.value,value)){
+            if (Objects.equals(current.value, value)) {
 
                 return true;
             }
@@ -73,17 +72,17 @@ public class LinkedQueue implements Queue, Iterable {
 
     @Override
     public void clear() {
-        size=0;
-        head=null;
+        size = 0;
+        head = null;
     }
 
     @Override
     public String toString() {
-        StringJoiner result = new StringJoiner(",","[","]");
+        StringJoiner result = new StringJoiner(",", "[", "]");
         Node current = head;
-        while (current.next != null){
+        while (current.next != null) {
             result.add(current.value.toString());
-            current=current.next;
+            current = current.next;
         }
         return result.toString();
     }
@@ -94,7 +93,7 @@ public class LinkedQueue implements Queue, Iterable {
         return new MyIterator(size);
     }
 
-    private class MyIterator implements Iterator{
+    private class MyIterator implements Iterator {
 
         private int index;
         private int maximalSize;
@@ -105,7 +104,7 @@ public class LinkedQueue implements Queue, Iterable {
 
         @Override
         public boolean hasNext() {
-            return index<maximalSize;
+            return index < maximalSize;
         }
 
         @Override
@@ -115,11 +114,11 @@ public class LinkedQueue implements Queue, Iterable {
         }
     }
 
-    private  class Node {
+    private class Node {
         Object value;
         Node next;
 
-        public Node(Object value){
+        public Node(Object value) {
             this.value = value;
         }
     }

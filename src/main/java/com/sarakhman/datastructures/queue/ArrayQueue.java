@@ -2,7 +2,7 @@ package com.sarakhman.datastructures.queue;
 
 import java.util.Iterator;
 
-public class ArrayQueue implements Queue, Iterable{
+public class ArrayQueue implements Queue, Iterable {
     private int size;
     private Object[] array;
 
@@ -16,29 +16,19 @@ public class ArrayQueue implements Queue, Iterable{
 
     @Override
     public void enqueue(Object value) {
-        if(value==null){
-            throw new NullPointerException("You canont add null element");
-        }
-        if(size == array.length){
-            Object[] newArray = new Object[array.length*2];
-            for (int i = 0; i < array.length; i++) {
-                newArray[i] = array[i];
-            }
-            array=newArray;
-        }
+        throwNullPointerException(value);
+
+        ensureCapacity();
+
         array[size] = value;
         size++;
     }
 
     @Override
     public Object dequeue() {
-        if(isEmpty()){
-            throw new IllegalStateException("Queue is empty!");
-        }
+        throwIllegalStateException();
         Object result = array[0];
-        for (int i = 0; i < size-1; i++) {
-            array[i]=array[i+1];
-        }
+        System.arraycopy(array,1,array,0,size);
         array[size] = null;
         size--;
         return result;
@@ -47,9 +37,7 @@ public class ArrayQueue implements Queue, Iterable{
 
     @Override
     public Object peek() {
-        if(isEmpty()){
-            throw new IllegalStateException("Queue is empty!");
-        }
+        throwIllegalStateException();
         return array[0];
     }
 
@@ -66,13 +54,11 @@ public class ArrayQueue implements Queue, Iterable{
 
     @Override
     public boolean contains(Object value) {
-        if(value==null){
-            throw new NullPointerException("You cannot look for null element");
-        }
+        throwNullPointerException(value);
         for (int i = 0; i < size; i++) {
             Object valueInQueue = array[i];
-            if(value.equals(valueInQueue))
-            return true;
+            if (value.equals(valueInQueue))
+                return true;
         }
         return false;
     }
@@ -83,19 +69,40 @@ public class ArrayQueue implements Queue, Iterable{
         size = 0;
     }
 
+    private void throwIllegalStateException(){
+        if (isEmpty()) {
+            throw new IllegalStateException("Queue is empty!");
+        }
+    }
+
+    private void throwNullPointerException(Object value){
+        if (value == null) {
+            throw new NullPointerException("You cannot add null element");
+        }
+    }
+
+    private void ensureCapacity(){
+        if (size == array.length) {
+            Object[] newArray = new Object[array.length * 2];
+            for (int i = 0; i < array.length; i++) {
+                newArray[i] = array[i];
+            }
+            array = newArray;
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; i++) {
             result.append(array[i].toString());
-            if(i==size-1){
+            if (i == size - 1) {
                 break;
-            }
-            else {
+            } else {
                 result.append(", ");
             }
         }
-        return  "[" + result + "]";
+        return "[" + result + "]";
     }
 
     @Override
@@ -103,7 +110,7 @@ public class ArrayQueue implements Queue, Iterable{
         return new MyIterator(size);
     }
 
-    private class MyIterator implements Iterator{
+    private class MyIterator implements Iterator {
         private int index;
         private int maximalSize;
 
@@ -113,7 +120,7 @@ public class ArrayQueue implements Queue, Iterable{
 
         @Override
         public boolean hasNext() {
-            return index<maximalSize;
+            return index < maximalSize;
         }
 
         @Override

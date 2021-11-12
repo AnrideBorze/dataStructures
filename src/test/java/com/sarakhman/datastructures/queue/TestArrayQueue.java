@@ -1,8 +1,7 @@
 package com.sarakhman.datastructures.queue;
 
 
-
-public class TestArrayQueue extends TestQueue{
+public class TestArrayQueue extends TestQueue {
 
 
     @Override

@@ -12,7 +12,7 @@ public abstract class TestList {
     private List list;
 
     @BeforeEach
-    public void before(){
+    public void before() {
         list = getList();
     }
 
@@ -20,16 +20,15 @@ public abstract class TestList {
 
 
     @Test
-    public void testIteratorWorkCorrectly(){
+    public void testIteratorWorkCorrectly() {
         list.add("HELLO");
         list.add("ANATOLIY");
         int count = 1;
         for (Object o : list) {
-            if(count ==1){                            //первая итерация
+            if (count == 1) {                            //первая итерация
                 assertEquals("HELLO", o);
                 count++;
-            }
-            else if(count ==2) {                      // вторая итерация
+            } else if (count == 2) {                      // вторая итерация
                 assertEquals("ANATOLIY", o);
             }
 
@@ -40,7 +39,7 @@ public abstract class TestList {
 
 
     @Test
-    public void testToStringReturnGoodText(){
+    public void testToStringReturnGoodText() {
         list.add("HELLO");
         list.add("ANATOLIY");
 
@@ -51,7 +50,7 @@ public abstract class TestList {
 
 
     @Test
-    public void testLastIndexOfReturnIndex(){
+    public void testLastIndexOfReturnIndex() {
 
         list.add("A");
         list.add("B");
@@ -61,8 +60,9 @@ public abstract class TestList {
         assertEquals(2, list.lastIndexOf("A"));
 
     }
+
     @Test
-    public void testLastIndexOfReturnNegativeWhenObjectDoesNotContains(){
+    public void testLastIndexOfReturnNegativeWhenObjectDoesNotContains() {
         list.add("A");
         list.add("B");
         assertEquals(-1, list.lastIndexOf("C"));
@@ -70,7 +70,7 @@ public abstract class TestList {
     }
 
     @Test
-    public void testIndexOfReturnNegativeWhenObjectDoesNotContains(){
+    public void testIndexOfReturnNegativeWhenObjectDoesNotContains() {
         list.add("A");
         list.add("B");
         assertEquals(-1, list.indexOf("C"));
@@ -78,7 +78,7 @@ public abstract class TestList {
     }
 
     @Test
-    public void testIndexOfReturnIndex(){
+    public void testIndexOfReturnIndex() {
         list.add("A");
         list.add("B");
         list.add("A");
@@ -87,22 +87,22 @@ public abstract class TestList {
     }
 
 
-
     @Test
-    public void testContainsReturnTrueWhenObjectContains(){
+    public void testContainsReturnTrueWhenObjectContains() {
         list.add("A");
         list.add("B");
         assertTrue(list.contains("A"));
 
     }
+
     @Test
-    public void testContainsReturnFalseInEmptylinkedList(){
+    public void testContainsReturnFalseInEmptylinkedList() {
         assertFalse(list.contains("A"));
 
     }
 
     @Test
-    public void testContainsReturnFalseWhenObjectNotContains(){
+    public void testContainsReturnFalseWhenObjectNotContains() {
         list.add("B");
         list.add("C");
         assertFalse(list.contains("A"));
@@ -111,80 +111,81 @@ public abstract class TestList {
 
 
     @Test
-    public void testAddAndSizeWorkCorrectly(){
+    public void testAddAndSizeWorkCorrectly() {
         list.add("A");
-        assertEquals(1,list.size());
+        assertEquals(1, list.size());
         list.add("B");
-        assertEquals(2,list.size());
+        assertEquals(2, list.size());
         list.add("C");
-        assertEquals(3,list.size());
+        assertEquals(3, list.size());
 
-    }
-    @Test
-    public void testAddAndSizeAndRemoteWorkCorrectlyWithSecondaryCalling(){
-        list.add("A");
-        assertEquals(1,list.size());
-        list.add("B");
-        assertEquals(2,list.size());
-        list.add("C");
-        assertEquals(3,list.size());
-        list.remove(2);
-        assertEquals(2,list.size());
-        list.remove(1);
-        assertEquals(1,list.size());
-        list.remove(0);
-        assertEquals(0,list.size());
-        list.add("A");
-        assertEquals(1,list.size());
-        list.add("B");
-        assertEquals(2,list.size());
-        list.add("C");
-        assertEquals(3,list.size());
-        list.remove(2);
-        assertEquals(2,list.size());
-        list.remove(1);
-        assertEquals(1,list.size());
-        list.remove(0);
-        assertEquals(0,list.size());
     }
 
     @Test
-    public void testAddAndSizeAndClearWorkAndIsEmptyCorrectly(){
+    public void testAddAndSizeAndRemoteWorkCorrectlyWithSecondaryCalling() {
         list.add("A");
-        assertEquals(1,list.size());
+        assertEquals(1, list.size());
+        list.add("B");
+        assertEquals(2, list.size());
+        list.add("C");
+        assertEquals(3, list.size());
+        list.remove(2);
+        assertEquals(2, list.size());
+        list.remove(1);
+        assertEquals(1, list.size());
+        list.remove(0);
+        assertEquals(0, list.size());
+        list.add("A");
+        assertEquals(1, list.size());
+        list.add("B");
+        assertEquals(2, list.size());
+        list.add("C");
+        assertEquals(3, list.size());
+        list.remove(2);
+        assertEquals(2, list.size());
+        list.remove(1);
+        assertEquals(1, list.size());
+        list.remove(0);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    public void testAddAndSizeAndClearWorkAndIsEmptyCorrectly() {
+        list.add("A");
+        assertEquals(1, list.size());
         list.clear();
         assertTrue(list.isEmpty());
-        assertEquals(0,list.size());
-
-
-    }
-    @Test
-    public void testAddWithIndexAndRemoveWorkCorrectly(){
-        list.add("A");
-        list.add("B",0);
-        list.add("C",0);
-        list.add("D",0);
-        assertEquals("D",list.remove(0));
-        assertEquals("C",list.remove(0));
-        assertEquals("B",list.remove(0));
-        assertEquals("A",list.remove(0));
-        assertEquals(0,list.size());
-
+        assertEquals(0, list.size());
 
 
     }
 
     @Test
-    public void testAddWithIndexAndRemoveWorkCorrectlyTwo(){
+    public void testAddWithIndexAndRemoveWorkCorrectly() {
         list.add("A");
-        list.add("B",0);
-        list.add("C",1);
-        list.add("D",1);
-        assertEquals("B",list.remove(0));
-        assertEquals("D",list.remove(0));
-        assertEquals("A",list.remove(1));
-        assertEquals("C",list.remove(0));
-        assertEquals(0,list.size());
+        list.add("B", 0);
+        list.add("C", 0);
+        list.add("D", 0);
+        assertEquals("D", list.remove(0));
+        assertEquals("C", list.remove(0));
+        assertEquals("B", list.remove(0));
+        assertEquals("A", list.remove(0));
+        assertEquals(0, list.size());
+
+
+    }
+
+    @Test
+    public void testAddWithIndexAndRemoveWorkCorrectlyTwo() {
+        list.add("A");
+        list.add("B", 0);
+        list.add("C", 1);
+        list.add("D", 1);
+        assertEquals("B", list.remove(0));
+        assertEquals("D", list.remove(0));
+        assertEquals("A", list.remove(1));
+        assertEquals("C", list.remove(0));
+        assertEquals(0, list.size());
 
     }
 
@@ -192,7 +193,8 @@ public abstract class TestList {
     public void testAddThrowIndexOutOfBoundsExceptionWhenIndexIsOutOfBounds() {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
             list.add("A");
-            list.add("D",3);;
+            list.add("D", 3);
+            ;
 
         });
     }
@@ -205,18 +207,21 @@ public abstract class TestList {
             list.set("A", 1);
         });
     }
+
     @Test
     public void testGetThrowIndexOutOfBoundsExceptionWhenListIsEmpty() {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
             list.get(1);
         });
     }
+
     @Test
     public void testSetThrowIndexOutOfBoundsExceptionWhenListIsEmpty() {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
             list.set("A", 1);
         });
     }
+
     @Test
     public void testRemoveThrowIndexOutOfBoundsExceptionWhenListIsEmpty() {
         Assertions.assertThrows(IndexOutOfBoundsException.class, () -> {
@@ -255,16 +260,16 @@ public abstract class TestList {
     public void testAddAndGetAndSizeWorkCorrectly() {
         list.add("A");
         list.add("B");
-        list.add("A",2);
-        list.add("B",3);
-        assertEquals("A",list.get(0));
-        assertEquals(4,list.size());
-        assertEquals("B",list.get(1));
-        assertEquals(4,list.size());
-        assertEquals("A",list.get(2));
-        assertEquals(4,list.size());
-        assertEquals("B",list.get(3));
-        assertEquals(4,list.size());
+        list.add("A", 2);
+        list.add("B", 3);
+        assertEquals("A", list.get(0));
+        assertEquals(4, list.size());
+        assertEquals("B", list.get(1));
+        assertEquals(4, list.size());
+        assertEquals("A", list.get(2));
+        assertEquals(4, list.size());
+        assertEquals("B", list.get(3));
+        assertEquals(4, list.size());
 
     }
 
@@ -272,12 +277,12 @@ public abstract class TestList {
     public void testAddAndSetAndGetWorkCorrectly() {
         list.add("A");
         list.add("B");
-        assertEquals("A",list.get(0));
-        assertEquals("B",list.get(1));
-        list.set("A",1);
-        list.set("B",0);
-        assertEquals("B",list.get(0));
-        assertEquals("A",list.get(1));
+        assertEquals("A", list.get(0));
+        assertEquals("B", list.get(1));
+        list.set("A", 1);
+        list.set("B", 0);
+        assertEquals("B", list.get(0));
+        assertEquals("A", list.get(1));
 
 
     }
