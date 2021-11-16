@@ -2,22 +2,22 @@ package com.sarakhman.datastructures.list;
 
 import java.util.Iterator;
 
-public class ArrayList implements List {
+public class ArrayList<T> implements List<T> {
     private int size;
-    private Object[] array;
+    private T[] array;
 
     public ArrayList() {
-        array = new Object[10];
+        array = (T[])new Object[10];
     }
 
 
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         add(value, size);
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         throwNullPointerException(value);
         throwIndexOutOfBoundsExceptionForAdd(index);
 
@@ -31,40 +31,39 @@ public class ArrayList implements List {
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         throwIndexOutOfBoundsExceptionForSetGetRemove(index);
 
-        Object result = array[index];
-        for (int i = 0; i < index; i++) {
-            array[i] = array[i];
-        }
-        for (int i = index; i < size - 1; i++) {
-            array[i] = array[i + 1];
-        }
-        size--;
+        T result = array[index];
+
+//        for (int i = index; i < size - 1; i++) {
+//            array[i] = array[i + 1];
+//        }
+        System.arraycopy(array, index+1, array, index , size - index - 1);
+         size--;
         return result;
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         throwIndexOutOfBoundsExceptionForSetGetRemove(index);
 
         return array[index];
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public T set(T value, int index) {
         throwNullPointerException(value);
         throwIndexOutOfBoundsExceptionForSetGetRemove(index);
 
-        Object result = array[index];
+        T result = array[index];
         array[index] = value;
         return result;
     }
 
     @Override
     public void clear() {
-        array = new Object[10];
+        array = (T[])new Object[10];
         size = 0;
 
     }
@@ -80,14 +79,14 @@ public class ArrayList implements List {
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         throwNullPointerException(value);
 
         return indexOf(value) >= 0;
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
         throwNullPointerException(value);
 
         for (int i = 0; i < size; i++) {
@@ -99,7 +98,7 @@ public class ArrayList implements List {
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(T value) {
         throwNullPointerException(value);
 
         for (int i = size; i >= 0; i--) {
@@ -111,17 +110,23 @@ public class ArrayList implements List {
     }
 
     @Override
-    public Iterator iterator() {
-        return new MyIterator();
+    public Iterator<T> iterator() {
+        return new MyIterator<>();
     }
 
 
-    private class MyIterator implements Iterator {
+    private class MyIterator<T> implements Iterator<T> {
         private int index;
+        private boolean canRemove;
 
         @Override
         public void remove() {
-
+            if(canRemove){
+                ArrayList.this.remove(index-1);
+            }
+            else{
+                throw new IllegalStateException("This element is already removed");
+            }
         }
 
         @Override
@@ -130,13 +135,14 @@ public class ArrayList implements List {
         }
 
         @Override
-        public Object next() {
+        public T next() {
             index++;
-            return get(index - 1);
+            canRemove = true;
+            return (T)get(index - 1);
         }
     }
 
-    private void throwNullPointerException(Object value) {
+    private void throwNullPointerException(T value) {
         if (value == null) {
             throw new NullPointerException("You cannot add null element");
         }
@@ -162,7 +168,7 @@ public class ArrayList implements List {
 
     private void insureCapacity() {
         if (size == array.length) {
-            Object[] newArray = new Object[(int) (array.length * 1.5)];
+            T[] newArray = (T[])new Object[(int) (array.length * 1.5)];
             for (int i = 0; i < array.length; i++) {
                 newArray[i] = array[i];
             }

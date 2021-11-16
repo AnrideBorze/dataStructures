@@ -4,25 +4,25 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-public class LinkedList implements List{
+public class LinkedList<T> implements List<T> {
     private int size;
-    private Node head;
-    private Node tail;
+    private Node<T> head;
+    private Node<T> tail;
 
 
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         add(value, size);
 
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         throwNullPointerException(value);
         throwIndexOutOfBoundsExceptionForAdd(index);
 
 
-        Node newNode = new Node(value);
+        Node<T> newNode = new Node<T>(value);
         if (size == 0) {
             head = tail = newNode;
         } else if (index == 0) {
@@ -35,7 +35,7 @@ public class LinkedList implements List{
             newNode.setPrev(tail);
             tail = newNode;
         } else {
-            Node current = fastWayToNode(index);
+            Node<T> current = fastWayToNode(index);
             newNode.setPrev(current.getPrev());
             newNode.setNext(current);
             current.prev.setNext(newNode);
@@ -46,13 +46,13 @@ public class LinkedList implements List{
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
 
-        Node result;
+        Node<T> result;
         if (size == 1) {
             result = head;
-            head = tail = new Node(null);
+            head = tail = new Node<T>(null);
         } else if (index == size - 1) {
             result = tail;
             tail = tail.prev;
@@ -76,7 +76,7 @@ public class LinkedList implements List{
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
 
         if (index == 0) {
@@ -84,20 +84,20 @@ public class LinkedList implements List{
         } else if (index == size - 1) {
             return tail.value;
         } else {
-            Node result = fastWayToNode(index);
+            Node<T> result = fastWayToNode(index);
             return result.value;
         }
 
     }
 
     @Override
-    public Object set(Object value, int index) {
+    public T set(T value, int index) {
         throwNullPointerException(value);
         throwIndexOutOfBoundsExceptionForRemoveGetSet(index);
 
 
-        Node newNode = new Node(value);
-        Node result = head;
+        Node<T> newNode = new Node<T>(value);
+        Node<T> result = head;
         if (index == 0) {
             head.setPrev(newNode);
             newNode.setNext(head);
@@ -138,17 +138,17 @@ public class LinkedList implements List{
     }
 
     @Override
-    public boolean contains(Object value) {
+    public boolean contains(T value) {
         throwNullPointerException(value);
 
-        return indexOf(value)>=0;
+        return indexOf(value) >= 0;
     }
 
     @Override
-    public int indexOf(Object value) {
+    public int indexOf(T value) {
         throwNullPointerException(value);
 
-        Node current = head;
+        Node<T> current = head;
         int index = 0;
         for (int i = 0; i < size - 1; i++) {
             if (Objects.equals(value, current.value)) {
@@ -161,10 +161,10 @@ public class LinkedList implements List{
     }
 
     @Override
-    public int lastIndexOf(Object value) {
+    public int lastIndexOf(T value) {
         throwNullPointerException(value);
 
-        Node current = tail;
+        Node<T> current = tail;
         int index = size - 1;
         for (int i = size; i >= 0; i--) {
             if (Objects.equals(value, current.value)) {
@@ -177,8 +177,8 @@ public class LinkedList implements List{
 
     }
 
-    private Node fastWayToNode(int index) {
-        Node result;
+    private Node<T> fastWayToNode(int index) {
+        Node<T> result;
         if (index <= size / 2) {
             result = head;
             for (int i = 0; i < index; i++) {
@@ -193,7 +193,7 @@ public class LinkedList implements List{
         return result;
     }
 
-    private void throwNullPointerException(Object value) {
+    private void throwNullPointerException(T value) {
         if (value == null) {
             throw new NullPointerException("You cannot look for null element");
         }
@@ -221,7 +221,7 @@ public class LinkedList implements List{
     @Override
     public String toString() {
         StringJoiner result = new StringJoiner(", ", "[", "]");
-        Node current = head;
+        Node<T> current = head;
         while (current.next != null) {
             result.add(current.value.toString());
             current = current.next;
@@ -231,64 +231,81 @@ public class LinkedList implements List{
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return new MyIterator();
     }
 
 
-    private class MyIterator implements Iterator {
-        private Node current = head;
+    private class MyIterator implements Iterator<T> {
+        private Node<T> current = head;
+        private boolean canRemove;
 
 
         @Override
         public void remove() {
-
+            if (canRemove) {
+                if (size == 1) {
+                    head = tail = null;
+                } else if (current == tail) {
+                    tail = tail.prev;
+                    tail.next = null;
+                } else if (current == head) {
+                    head = head.next;
+                    head.prev = null;
+                } else {
+                    current.prev.prev.setNext(current);
+                    current.setPrev(current.prev.prev);
+                }
+            }
+            canRemove = false;
         }
+
         @Override
         public boolean hasNext() {
             return current != null;
         }
 
         @Override
-        public Object next() {
-            Object value = current.value;
+        public T next() {
+            T value = current.value;
             current = current.next;
+            canRemove = true;
             return value;
         }
     }
 
 
-    private class Node {
-        private Object value;
-        private Node next;
-        private Node prev;
+    private class Node<T> {
+        private T value;
+        private Node<T> next;
+        private Node<T> prev;
 
 
-        public Node(Object value) {
+        public Node(T value) {
             this.value = value;
         }
 
-        public Object getValue() {
+        public T getValue() {
             return value;
         }
 
-        public void setValue(Object value) {
+        public void setValue(T value) {
             this.value = value;
         }
 
-        public Node getNext() {
+        public Node<T> getNext() {
             return next;
         }
 
-        public void setNext(Node next) {
+        public void setNext(Node<T> next) {
             this.next = next;
         }
 
-        public Node getPrev() {
+        public Node<T> getPrev() {
             return prev;
         }
 
-        public void setPrev(Node prev) {
+        public void setPrev(Node<T> prev) {
             this.prev = prev;
         }
     }
